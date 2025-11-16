@@ -1,35 +1,61 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:student_app/model/student_model.dart';
+import 'package:student_app/presentation/screens/details_page.dart';
 
 class StudentCard extends StatelessWidget {
   final bool isList;
-  final int index;
-  const StudentCard({super.key, required this.isList, required this.index});
+  final StudentModel student;
+  const StudentCard({super.key, required this.isList,required this.student});
 
   @override
   Widget build(BuildContext context) {
     return isList
         ? ListTile(
             leading: CircleAvatar(
-              backgroundImage: AssetImage("assets/images/Logo.jpg"),
+            backgroundImage: FileImage(File(student.imagePath ?? "")),
               radius: 30,
             ),
-            title: Text("Student $index"),
-          )
-        : Container(
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(15),
+            title: Text(student.name, style: TextStyle(fontWeight: FontWeight.bold)),
+            onTap: () => Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => DetailsPage(studentModel: student,),
+              ),
             ),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                CircleAvatar(
-                  backgroundImage: AssetImage("assets/images/Logo.jpg"),
-                  radius: 30,
-                ),
-                SizedBox(height: 5),
-                Text("Student $index"),
-              ],
+          )
+        : GestureDetector(
+            onTap: () => Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => DetailsPage(studentModel: student,),
+              ),
+            ),
+            child: Container(
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(15),
+              ),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  CircleAvatar(
+                    backgroundImage: FileImage(File(student.imagePath ?? "")),
+                    radius: 30,
+                  ),
+                  SizedBox(height: 5),
+                  Text(
+                    student.name,
+                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
+                  ),
+                  // SizedBox(height: 5),
+                  // Text(
+                  //   "Roll No: ${rollno.toString()}",
+                  //   style: TextStyle(fontSize: 12),
+                  // ),
+                ],
+              ),
             ),
           );
   }

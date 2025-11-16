@@ -1,8 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:student_app/db/functions.dart';
 import 'package:student_app/presentation/screens/splash_screen.dart';
+import 'package:student_app/state/provider/student_provider.dart';
 
-void main() {
-  runApp(const MyApp());
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await DBFunctions.instance.initDb();
+  runApp(
+    ChangeNotifierProvider(
+      create: (context) => StudentProvider(),
+      child: const MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {

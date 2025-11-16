@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:student_app/presentation/screens/add_student.dart';
+import 'package:student_app/presentation/widgets/search_bar_widget.dart';
 import 'package:student_app/presentation/widgets/student_card.dart';
+import 'package:student_app/state/provider/student_provider.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -10,10 +14,11 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   bool isList = true;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color.fromARGB(255, 189, 214, 191),
+      //backgroundColor: const Color.fromARGB(255, 235, 240, 235),
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         title: Text(
@@ -31,40 +36,64 @@ class _HomePageState extends State<HomePage> {
           padding: const EdgeInsets.all(8.0),
           child: Column(
             children: [
-              IconButton(
-                onPressed: () {
-                  setState(() {
-                    isList = !isList;
-                  });
-                },
-                icon: isList ? Icon(Icons.view_list) : Icon(Icons.grid_view),
+              SearchBarWidget(),
+              SizedBox(height: 10),
+              Align(
+                alignment: Alignment.centerRight,
+                child: IconButton(
+                  onPressed: () {
+                    setState(() {
+                      isList = !isList;
+                    });
+                  },
+                  icon: isList ? Icon(Icons.view_list) : Icon(Icons.grid_view),
+                ),
               ),
               SizedBox(height: 10),
-              isList
-                  ? Expanded(
-                      child: ListView.separated(
-                        itemCount: 15,
-                        itemBuilder: (context, index) =>
-                            StudentCard(index: index + 1, isList: isList),
-                        separatorBuilder: (context, index) => Divider(
-                          indent: 15,
-                          endIndent: 15,
-                          color: Colors.green,
-                        ),
+              Consumer<StudentProvider>(
+                builder: (context, provider, child) {
+                  final students = provider.filteredStudents;
+                  if (students.isEmpty) {
+                    return Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Text(
+                        "No Students added yet. Press the '+' below to add new students",
                       ),
-                    )
-                  : Expanded(
-                      child: GridView.builder(
-                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: 3,
-                          crossAxisSpacing: 10,
-                          mainAxisSpacing: 10,
-                        ),
-                        itemBuilder: (context, index) =>
-                            StudentCard(index: index+1, isList: isList),
-                        itemCount: 15,
-                      ),
-                    ),
+                    );
+                  }
+                  return isList
+                      ? Expanded(
+                          child: ListView.separated(
+                            itemCount: students.length,
+                            itemBuilder: (context, index) => StudentCard(
+                              isList: isList,
+                              student: students[index],
+                            ),
+                            separatorBuilder: (context, index) => Divider(
+                              indent: 15,
+                              endIndent: 15,
+                              color: const Color.fromARGB(255, 208, 207, 207),
+                            ),
+                          ),
+                        )
+                      : Expanded(
+                          child: GridView.builder(
+                            gridDelegate:
+                                SliverGridDelegateWithFixedCrossAxisCount(
+                                  crossAxisCount: 3,
+                                  crossAxisSpacing: 10,
+                                  mainAxisSpacing: 10,
+                                ),
+                            itemBuilder: (context, index) => StudentCard(
+                              isList: isList,
+                              student: students[index],
+                            ),
+                            itemCount: students.length,
+                          ),
+                        );
+                },
+              ),
+              SizedBox(height: 10),
             ],
           ),
         ),
@@ -74,9 +103,17 @@ class _HomePageState extends State<HomePage> {
         height: 60,
         decoration: BoxDecoration(
           color: Colors.green,
-          borderRadius: BorderRadius.circular(20)
+          borderRadius: BorderRadius.circular(20),
         ),
-        child: IconButton(onPressed: () {}, icon: Icon(Icons.add, size: 30,)),
+        child: IconButton(
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => AddStudent()),
+            );
+          },
+          icon: Icon(Icons.add, size: 30, color: Colors.white),
+        ),
       ),
     );
   }
