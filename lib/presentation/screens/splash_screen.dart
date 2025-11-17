@@ -1,9 +1,9 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:student_app/presentation/screens/home_page.dart';
-import 'package:student_app/state/provider/student_provider.dart';
+import 'package:get/get_instance/get_instance.dart';
+import 'package:get/route_manager.dart';
+import 'package:student_app/state/getx/student_controller.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -17,16 +17,11 @@ class _SplashScreenState extends State<SplashScreen> {
   void initState() {
     Timer(
       Duration(seconds: 3),
-      () => context.read<StudentProvider>().loadStudents().then((_) => goto()),
+      () => Get.find<StudentController>().loadStudents().then(
+        (_) => Get.offNamed('/home'),
+      ),
     );
     super.initState();
-  }
-
-  void goto() {
-    Navigator.pushReplacement(
-      context,
-      MaterialPageRoute(builder: (context) => HomePage()),
-    );
   }
 
   @override

@@ -1,11 +1,12 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:get/get_navigation/get_navigation.dart';
+import 'package:get/instance_manager.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:provider/provider.dart';
 import 'package:student_app/core/utils/show_dialog.dart';
 import 'package:student_app/model/student_model.dart';
-import 'package:student_app/state/provider/student_provider.dart';
+import 'package:student_app/state/getx/student_controller.dart';
 
 class AddStudent extends StatefulWidget {
   const AddStudent({super.key});
@@ -136,11 +137,11 @@ class _AddStudentState extends State<AddStudent> {
                       );
 
                       try {
-                        await Provider.of<StudentProvider>(
-                          context,
-                          listen: false,
-                        ).addStudents(newStudent);
-                        Navigator.pop(context);
+                        await Get.find<StudentController>().addStudents(
+                          newStudent,
+                        );
+                        Get.back();
+                        // Get.showSnackbar(GetSnackBar());
                         ScaffoldMessenger.of(context).showSnackBar(
                           SnackBar(
                             content: Text("Student added successfully"),

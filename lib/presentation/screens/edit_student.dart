@@ -1,11 +1,12 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:get/instance_manager.dart';
+import 'package:get/route_manager.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:provider/provider.dart';
 import 'package:student_app/core/utils/show_dialog.dart';
 import 'package:student_app/model/student_model.dart';
-import 'package:student_app/state/provider/student_provider.dart';
+import 'package:student_app/state/getx/student_controller.dart';
 
 class EditStudent extends StatefulWidget {
   final StudentModel student;
@@ -49,7 +50,6 @@ class _EditStudentState extends State<EditStudent> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      //backgroundColor: const Color.fromARGB(255, 235, 240, 235),
       appBar: AppBar(
         title: Text("EDIT STUDENT"),
         centerTitle: true,
@@ -175,9 +175,9 @@ class _EditStudentState extends State<EditStudent> {
                           imagePath: imagePath ?? widget.student.imagePath,
                         );
 
-                        context.read<StudentProvider>().updateStudents(student);
+                        Get.find<StudentController>().updateStudents(student);
                         int count = 0;
-                        Navigator.of(context).popUntil((route) => count++ == 2);
+                        Get.offNamedUntil('/home', (route) => count++ == 2);
 
                         ScaffoldMessenger.of(context).showSnackBar(
                           SnackBar(

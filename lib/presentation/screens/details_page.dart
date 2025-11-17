@@ -1,11 +1,12 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+import 'package:get/get_navigation/src/extension_navigation.dart';
+import 'package:get/instance_manager.dart';
 import 'package:student_app/core/utils/show_dialog.dart';
 import 'package:student_app/model/student_model.dart';
 import 'package:student_app/presentation/screens/edit_student.dart';
-import 'package:student_app/state/provider/student_provider.dart';
+import 'package:student_app/state/getx/student_controller.dart';
 
 class DetailsPage extends StatelessWidget {
   final StudentModel studentModel;
@@ -17,7 +18,7 @@ class DetailsPage extends StatelessWidget {
       //backgroundColor: const Color.fromARGB(255, 235, 240, 235),
       appBar: AppBar(
         leading: IconButton(
-          onPressed: () => Navigator.pop(context),
+          onPressed: () => Get.back(),
           icon: Icon(Icons.arrow_back),
         ),
         title: Text("STUDENT DETAILS"),
@@ -143,13 +144,7 @@ class DetailsPage extends StatelessWidget {
                     height: 60,
                     child: TextButton.icon(
                       onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) =>
-                                EditStudent(student: studentModel),
-                          ),
-                        );
+                        Get.to(() => EditStudent(student: studentModel));
                       },
                       label: Text(
                         "EDIT DETAILS",
@@ -183,10 +178,10 @@ class DetailsPage extends StatelessWidget {
                         if (!confirm) return;
 
                         try {
-                          context.read<StudentProvider>().deleteStudents(
+                          Get.find<StudentController>().deleteStudents(
                             studentModel.rollno!,
                           );
-                          Navigator.pop(context);
+                          Get.back();
                           ScaffoldMessenger.of(context).showSnackBar(
                             SnackBar(
                               content: Text("Student deleted successfully"),
