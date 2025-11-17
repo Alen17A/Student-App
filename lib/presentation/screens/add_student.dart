@@ -126,17 +126,17 @@ class _AddStudentState extends State<AddStudent> {
 
                     if (!confirm) return;
 
-                    try {
-                      if (formKey.currentState!.validate()) {
-                        final newStudent = StudentModel(
-                          name: nameController.text.trim(),
-                          age: int.parse(ageController.text.trim()),
-                          std: classController.text.trim(),
-                          division: divisionController.text.trim(),
-                          imagePath: imagePath ?? '',
-                        );
+                    if (formKey.currentState!.validate()) {
+                      final newStudent = StudentModel(
+                        name: nameController.text.trim(),
+                        age: int.parse(ageController.text.trim()),
+                        std: classController.text.trim(),
+                        division: divisionController.text.trim(),
+                        imagePath: imagePath ?? '',
+                      );
 
-                        Provider.of<StudentProvider>(
+                      try {
+                        await Provider.of<StudentProvider>(
                           context,
                           listen: false,
                         ).addStudents(newStudent);
@@ -147,14 +147,23 @@ class _AddStudentState extends State<AddStudent> {
                             backgroundColor: Colors.green,
                           ),
                         );
+                      } catch (e) {
+                        if (e.toString().contains("Duplicate_Student")) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: Text("Student already exists.."),
+                              backgroundColor: Colors.blue,
+                            ),
+                          );
+                        } else {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: Text("Failed to add student"),
+                              backgroundColor: Colors.red,
+                            ),
+                          );
+                        }
                       }
-                    } catch (e) {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                          content: Text("Failed to add student"),
-                          backgroundColor: Colors.red,
-                        ),
-                      );
                     }
                   },
                   style: ButtonStyle(

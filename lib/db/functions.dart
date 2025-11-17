@@ -34,9 +34,36 @@ class DBFunctions {
     return db!;
   }
 
+  // To check for duplicate insertions
+  Future<bool> isduplicateEntry(StudentModel studentModel) async {
+    final database = await initDb();
+
+    final result = await database.query(
+      'students',
+      where:
+          'name = ? AND age = ? AND std = ? AND division = ?',
+      whereArgs: [
+        studentModel.name,
+        studentModel.age,
+        studentModel.std,
+        studentModel.division,
+      ],
+    );
+
+    //print(result.isNotEmpty);
+
+    return result.isNotEmpty;
+  }
+
   // Insert student details
   Future<int> insertStudent(StudentModel studentModel) async {
     final database = await initDb();
+    bool exists = await isduplicateEntry(studentModel);
+
+    if (exists) {
+      throw Exception("Duplicate_Student");
+    }
+
     return await database.insert('students', studentModel.toMap());
   }
 

@@ -176,8 +176,8 @@ class _EditStudentState extends State<EditStudent> {
                         );
 
                         context.read<StudentProvider>().updateStudents(student);
-                        Navigator.pop(context);
-                        Navigator.pop(context);
+                        int count = 0;
+                        Navigator.of(context).popUntil((route) => count++ == 2);
 
                         ScaffoldMessenger.of(context).showSnackBar(
                           SnackBar(
