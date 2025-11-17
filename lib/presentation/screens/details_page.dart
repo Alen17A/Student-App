@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get_navigation/get_navigation.dart';
 import 'package:get/get_navigation/src/extension_navigation.dart';
 import 'package:get/instance_manager.dart';
-import 'package:student_app/core/utils/show_dialog.dart';
+import 'package:student_app/core/utils/confirmations.dart';
 import 'package:student_app/model/student_model.dart';
 import 'package:student_app/presentation/screens/edit_student.dart';
 import 'package:student_app/state/getx/student_controller.dart';
