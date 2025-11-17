@@ -158,8 +158,7 @@ class _EditStudentState extends State<EditStudent> {
                 child: TextButton(
                   onPressed: () async {
                     try {
-                      bool confirm = await showConfirmationDialog(
-                        context,
+                      bool confirm = await Confirmations.showConfirmationDialog(
                         "Do you want to save these details?",
                       );
 
@@ -179,20 +178,13 @@ class _EditStudentState extends State<EditStudent> {
                         int count = 0;
                         Get.offNamedUntil('/home', (route) => count++ == 2);
 
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(
-                            content: Text("Student updated successfully"),
-                            backgroundColor: Colors.green,
-                          ),
+                        Confirmations.snackBarSuccess(
+                          "Success",
+                          "Student Updated Successfully",
                         );
                       }
                     } catch (e) {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                          content: Text("Failed to update student. Try Again"),
-                          backgroundColor: Colors.red,
-                        ),
-                      );
+                      Confirmations.snackBarFailure("Failed", "Failed to update student...Try Again");
                     }
                   },
                   style: ButtonStyle(

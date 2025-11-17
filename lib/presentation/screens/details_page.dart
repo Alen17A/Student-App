@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:get/get_navigation/get_navigation.dart';
 import 'package:get/get_navigation/src/extension_navigation.dart';
 import 'package:get/instance_manager.dart';
 import 'package:student_app/core/utils/show_dialog.dart';
@@ -170,8 +171,8 @@ class DetailsPage extends StatelessWidget {
                     height: 60,
                     child: TextButton.icon(
                       onPressed: () async {
-                        bool confirm = await showConfirmationDialog(
-                          context,
+                        bool
+                        confirm = await Confirmations.showConfirmationDialog(
                           "Are you sure you want to remove ${studentModel.name}?",
                         );
 
@@ -182,19 +183,12 @@ class DetailsPage extends StatelessWidget {
                             studentModel.rollno!,
                           );
                           Get.back();
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(
-                              content: Text("Student deleted successfully"),
-                              backgroundColor: Colors.green,
-                            ),
+                          Confirmations.snackBarSuccess(
+                            "Success",
+                            "Student Removed Successfully",
                           );
                         } catch (e) {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(
-                              content: Text("Failed to delete the student"),
-                              backgroundColor: Colors.red,
-                            ),
-                          );
+                          Confirmations.snackBarFailure("Failed", "Failed to remove student");
                         }
                       },
                       style: ButtonStyle(

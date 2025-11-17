@@ -1,30 +1,42 @@
 import 'package:flutter/material.dart';
+import 'package:get/route_manager.dart';
 
-Future<bool> showConfirmationDialog(
-  BuildContext context,
-  String message,
-) async {
-  return await showDialog(
-    context: context,
-    builder: (context) {
-      return AlertDialog(
-        title: Text("Are you sure?"),
-        content: Text(message),
-        actions: [
-          TextButton(
-            onPressed: () {
-              Navigator.pop(context, false);
-            },
-            child: Text("No"),
-          ),
-          TextButton(
-            onPressed: () {
-              Navigator.pop(context, true);
-            },
-            child: Text("Yes"),
-          ),
-        ],
-      );
-    },
-  );
+class Confirmations{
+  static Future<bool> showConfirmationDialog(String message) async {
+    return await Get.defaultDialog(
+          title: "Are you sure?",
+          titlePadding: EdgeInsets.only(top: 10, bottom: 10),
+          content: Text(message),
+          textConfirm: "Yes",
+          textCancel: "No",
+          onConfirm: () => Get.back(result: true),
+        ) ??
+        false;
+  }
+
+  static SnackbarController snackBarSuccess(String title, String message){
+    return Get.snackbar(
+      "",
+      message,
+      titleText: Text(title, style: TextStyle(fontWeight: FontWeight.bold)),
+      backgroundColor: Colors.white,
+      icon: Icon(Icons.check_circle, color: Colors.green),
+      borderRadius: 10,
+      borderWidth: 3,
+      borderColor: Colors.green,
+    );
+  }
+
+  static SnackbarController snackBarFailure(String title, String message) {
+    return Get.snackbar(
+      "",
+      message,
+      titleText: Text(title, style: TextStyle(fontWeight: FontWeight.bold)),
+      backgroundColor: Colors.white,
+      icon: Icon(Icons.cancel, color: Colors.red),
+      borderRadius: 10,
+      borderWidth: 3,
+      borderColor: Colors.red,
+    );
+  }
 }

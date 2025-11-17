@@ -120,8 +120,7 @@ class _AddStudentState extends State<AddStudent> {
                 height: 50,
                 child: TextButton(
                   onPressed: () async {
-                    bool confirm = await showConfirmationDialog(
-                      context,
+                    bool confirm = await Confirmations.showConfirmationDialog(
                       "Add New Student?",
                     );
 
@@ -141,28 +140,32 @@ class _AddStudentState extends State<AddStudent> {
                           newStudent,
                         );
                         Get.back();
-                        // Get.showSnackbar(GetSnackBar());
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(
-                            content: Text("Student added successfully"),
-                            backgroundColor: Colors.green,
-                          ),
+                        Confirmations.snackBarSuccess(
+                          "Success",
+                          "Student Added Successfully",
                         );
+                        // Get.snackbar(
+                        //   "",
+                        //   "Student Added Successfully",
+                        //   titleText: Text(
+                        //     "Success",
+                        //     style: TextStyle(fontWeight: FontWeight.bold),
+                        //   ),
+                        //   backgroundColor: Colors.white,
+                        //   icon: Icon(Icons.check_circle, color: Colors.green),
+                        //   borderRadius: 10,
+                        //   borderWidth: 3,
+                        //   borderColor: Colors.green,
+                        // );
                       } catch (e) {
                         if (e.toString().contains("Duplicate_Student")) {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(
-                              content: Text("Student already exists.."),
-                              backgroundColor: Colors.blue,
-                            ),
+                          Get.rawSnackbar(
+                            message: "Student already exists...",
+                            backgroundColor: Colors.blue,
+                            animationDuration: Duration(seconds: 3),
                           );
                         } else {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(
-                              content: Text("Failed to add student"),
-                              backgroundColor: Colors.red,
-                            ),
-                          );
+                          Confirmations.snackBarFailure("Failed", "Failed to add student");
                         }
                       }
                     }
