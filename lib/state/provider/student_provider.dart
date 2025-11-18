@@ -12,10 +12,6 @@ class StudentProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  // StudentProvider() {
-  //   loadStudents();
-  // }
-
   Future<void> addStudents(StudentModel studentModel) async {
     int id = await DBFunctions.instance.insertStudent(studentModel);
     studentModel.rollno = id;
